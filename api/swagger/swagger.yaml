@@ -1,0 +1,151 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: Machine Test
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths
+basePath: /
+#
+schemes:
+  # tip: remove http to make employeeion-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /employee:
+    x-swagger-router-controller: employee
+    post:
+      tags: ['Employee']
+      description: create employee
+      summary: create employee
+      # used as the method name of the controller
+      operationId: createEmployee
+      parameters:
+        - name: body
+          in: body
+          description: input data
+          schema:
+           $ref: '#/definitions/createEmployee'
+          required: true
+      responses:
+        "201":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/response"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/response"
+    get:
+      tags: ['Employee']
+      summary: get all employees
+      description: get all employees
+      # used as the method name of the controller
+      operationId: getAllEmployee
+      parameters:
+        - name: page
+          in: query
+          description: page no
+          required: false
+          type: number
+          default: 1
+        - name: limit
+          in: query
+          description: per page
+          required: false
+          type: number
+          default: 10
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/response"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/response"
+  /employee/{id}:
+    x-swagger-router-controller: employee
+    patch:
+      tags: ['Employee']
+      description: update employee
+      summary: update employee
+      # used as the method name of the controller
+      operationId: updateEmployee
+      parameters:
+        - name: id
+          in: path
+          description:  employee id
+          type: string
+          required: true
+        - name: body
+          in: body
+          description: input data
+          schema:
+            $ref: '#/definitions/createEmployee'
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/response"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/response"
+    delete:
+      tags: ['Employee']
+      summary: delete employee
+      description: delete employee
+      # used as the method name of the controller
+      operationId: deleteEmployee
+      parameters:
+        - name: id
+          in: path
+          description:  record id
+          type: string
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/response"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/response"
+
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  response:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  createEmployee:
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      dob:
+        type: string
